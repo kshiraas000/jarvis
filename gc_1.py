@@ -62,10 +62,10 @@ def main():
 if __name__ == "__main__":
     main()
 
-def speak(message):
-    engine = pyttsx3.init()
-    engine.say(message)
-    engine.runAndWait()
+# def speak(message):
+#     engine = pyttsx3.init()
+#     engine.say(message)
+#     engine.runAndWait()
 
-# Example:
-speak("Your event has been added successfully!")
+# # Example:
+# speak("Your event has been added successfully!")
