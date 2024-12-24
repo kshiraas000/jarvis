@@ -12,3 +12,4 @@ token.json
 # IDE settings
 *.idea/
 .vscode/
+.vercel
