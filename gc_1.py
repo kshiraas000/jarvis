@@ -62,7 +62,7 @@ def parse_event(command):
         print("Invalid format. Please say the event in the format 'Event at time'.")
         return None, None, None
 
-    summary = parts[0].strip()
+    summary = parts[0].strip().capitalize()
     start_time = dateparser.parse(parts[1].strip())
     if not start_time:
         print("Could not parse the time. Please try again.")

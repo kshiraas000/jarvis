@@ -50,6 +50,10 @@ def api_add_event():
     add_event(summary, start_time, end_time, category)
     return jsonify({"message": f"Event '{summary}' added successfully!"})
 
+@app.route('/')
+def home():
+    return 'Welcome to the Flask app'
+
 # Do not use app.run() on Vercel. It handles the serverless functions.
 if __name__ == "__main__":
     app.run(debug=True)
