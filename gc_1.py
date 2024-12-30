@@ -3,10 +3,8 @@ import os.path
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
-import speech_recognition as sr
-import dateparser
 from datetime import datetime, timedelta
-import pyttsx3
+import dateparser
 
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
@@ -30,10 +28,11 @@ def authenticate():
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
 
-    return creds
+    # Return the service object instead of just credentials
+    return build('calendar', 'v3', credentials=creds)
 
 def add_event(summary, start_time, end_time):
-    service = build('calendar', 'v3', credentials=authenticate())
+    service = authenticate()  # Get the service directly
     event = {
         'summary': summary,
         'start': {'dateTime': start_time, 'timeZone': 'America/New_York'},
@@ -41,19 +40,6 @@ def add_event(summary, start_time, end_time):
     }
     service.events().insert(calendarId='primary', body=event).execute()
     print(f"Event '{summary}' added!")
-
-def get_speech_input():
-    recognizer = sr.Recognizer()
-    with sr.Microphone() as source:
-        print("Listening...")
-        audio = recognizer.listen(source)
-    try:
-        command = recognizer.recognize_google(audio)
-        print(f"You said: {command}")
-        return command
-    except sr.UnknownValueError:
-        print("Sorry, I didn't understand that.")
-        return None
 
 def parse_event(command):
     # Example: "Lunch with Sarah tomorrow at noon"
@@ -70,13 +56,3 @@ def parse_event(command):
 
     end_time = start_time + timedelta(hours=1)  # Default 1-hour duration
     return summary, start_time.isoformat(), end_time.isoformat()
-
-def main():
-    command = get_speech_input()
-    if command:
-        summary, start_time, end_time = parse_event(command)
-        if summary and start_time and end_time:
-            add_event(summary, start_time, end_time)
-
-if __name__ == "__main__":
-    main()
